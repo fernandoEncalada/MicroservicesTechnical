@@ -3,10 +3,10 @@ package com.microservice.account_microservice.infrastructure.adapter.in.rest.dto
 import com.microservice.account_microservice.domain.model.enums.MovementType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

@@ -6,6 +6,7 @@
 		<groupId>com.mycompany.app</groupId>
 		<artifactId>TechnicalMicroservices</artifactId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath/>
 	</parent>
 	<groupId>com.microservice.eureka</groupId>
 	<artifactId>eureka-microservice</artifactId>
@@ -35,6 +36,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.26</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -53,6 +61,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version> <!-- Usa la última versión compatible -->
+				<configuration>
+					<compilerArgs>
+						<arg>--add-opens</arg>
+						<arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+					</compilerArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

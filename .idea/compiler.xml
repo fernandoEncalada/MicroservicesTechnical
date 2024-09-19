@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-microservice" />
         <module name="gateway-microservice" />
-        <module name="config-microservice" />
       </profile>
       <profile name="Annotation profile for TechnicalMicroservices" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -18,17 +17,20 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="account-microservice" />
         <module name="client-microservice" />
+        <module name="account-microservice" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="config-microservice" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="account-microservice" options="-parameters" />
       <module name="client-microservice" options="-parameters" />
       <module name="config-microservice" options="-parameters" />
-      <module name="eureka-microservice" options="-parameters" />
+      <module name="eureka-microservice" options="-parameters --add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED" />
       <module name="gateway-microservice" options="-parameters" />
     </option>
   </component>

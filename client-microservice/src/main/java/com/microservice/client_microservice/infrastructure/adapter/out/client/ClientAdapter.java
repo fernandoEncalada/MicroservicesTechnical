@@ -27,13 +27,11 @@ public class ClientAdapter implements IClientPort {
     @Override
     public ClientResponseDto create(ClientRequestDto client) {
 
-        // Guardar el cliente en la base de datos
         ClientEntity clienteGuardado = clienteRepository.save(ClientMapper.toEntity(client));
 
-        // Publicar el evento de creación de cliente
         ClientResponseDto responseDto = ClientMapper.toResponseDto(clienteGuardado);
+
         eventPublisher.publishClienteCreated(new ClientResponseDto(clienteGuardado.getId(), client.getSaldoInicial(), client.getTipoCuenta()));
-        // Devolver el cliente creado
         return responseDto;
     }
 
@@ -46,7 +44,6 @@ public class ClientAdapter implements IClientPort {
         clientEntity.setContrasenia(cliente.getContrasenia());
         clientEntity.setEstado(cliente.getEstado());
         clientEntity.setNombre(cliente.getNombre());
-        clientEntity.setIdentificacion(cliente.getIdentificacion());
         clientEntity.setDireccion(cliente.getDireccion());
         clientEntity.setGenero(cliente.getGenero());
         clientEntity.setTelefono(cliente.getTelefono());

@@ -1,0 +1,100 @@
+version: '3.7'
+
+services:
+  db-client:
+    image: mysql
+    container_name: db-client
+    environment:
+      MYSQL_DATABASE: mcsv_client
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test123
+    volumes:
+      - db-client-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  db-account:
+    image: mysql
+    container_name: db-account
+    environment:
+      MYSQL_DATABASE: mcsv_account
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test123
+    volumes:
+      - db-account-data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+
+  eureka-server:
+    image: eureka
+    container_name: eureka-server-container
+    build:
+      context: ./eureka-microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    image: api-gateway-image
+    container_name: api-gateway-container
+    build:
+      context: ./gateway-microservice
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  account-microservice:
+    image: account-mcsv-image
+    container_name: account-mcsv-container
+    build:
+      context: ./account-microservice
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    depends_on:
+      - db-account
+      - rabbitmq
+      - eureka-server
+      - api-gateway
+    networks:
+      - rabbitmq_network
+
+  client-microservice:
+    image: client-mcsv-image
+    container_name: client-mcsv-container
+    build:
+      context: ./client-microservice
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    depends_on:
+      - db-client
+      - rabbitmq
+      - eureka-server
+      - api-gateway
+    networks:
+      - rabbitmq_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - rabbitmq_network
+
+networks:
+  rabbitmq_network:
+    driver: bridge
+
+volumes:
+  db-client-data:
+  db-account-data:

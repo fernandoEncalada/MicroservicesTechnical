@@ -8,6 +8,7 @@ import com.microservice.account_microservice.infrastructure.adapter.out.account.
 import com.microservice.account_microservice.infrastructure.adapter.out.movement.entity.MovementEntity;
 import com.microservice.account_microservice.infrastructure.adapter.out.movement.mapper.MovementMapper;
 import com.microservice.account_microservice.infrastructure.adapter.out.movement.repository.MovementRepository;
+import com.microservice.account_microservice.infrastructure.exception.AccountException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.microservice.account_microservice.infrastructure.adapter.out.movement.mapper.MovementMapper.toResponseDto;
 
@@ -33,28 +33,22 @@ public class MovementAdapter implements IMovimientoPort {
         movementEntity.setSaldo(movimiento.getSaldo());
         movementEntity.setCuenta(account);
 
-        // Guardar la entidad MovimientoEntity
         MovementEntity savedEntity = movementRepository.save(movementEntity);
 
-        // Retornar el objeto Movimiento con los datos persistidos
         return toResponseDto(savedEntity);
     }
 
     @Override
     public MovementResponseDto update(Long id, MovementRequestDto movimiento) {
         MovementEntity movementEntity = movementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movimiento not found with id " + id));
+                .orElseThrow(() -> new AccountException("Movimiento no encontrado con id: " + id));
 
-        // Actualizar campos en movimientoEntity desde movimiento
-        movementEntity.setFecha(new Date());
         movementEntity.setTipoMovimiento(movimiento.getTipoMovimiento());
         movementEntity.setValor(movimiento.getValor());
         movementEntity.setSaldo(movimiento.getSaldo());
 
-        // Guardar la entidad MovimientoEntity actualizada
         MovementEntity updatedEntity = movementRepository.save(movementEntity);
 
-        // Retornar el objeto Movimiento con los datos actualizados
         return toResponseDto(updatedEntity);
     }
 

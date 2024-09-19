@@ -1,8 +1,9 @@
 spring:
   application:
     name: account-microservice
-  config:
-    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      enabled: false
 
   rabbitmq:
     host: localhost
@@ -12,6 +13,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/mcsv_account
+#    username: test
+#    password: test123
     username: root
     password: 3tk98M17
 

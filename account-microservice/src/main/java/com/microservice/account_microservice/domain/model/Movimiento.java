@@ -21,11 +21,4 @@ public class Movimiento {
     private Double valor;
     private Double saldo;
 
-    public void validarSaldo(Double saldoInicial) {
-        Double nuevoSaldo = saldoInicial + this.valor;
-        if (nuevoSaldo < 0) {
-            throw new AccountException("Saldo no disponible");
-        }
-    }
-
 }

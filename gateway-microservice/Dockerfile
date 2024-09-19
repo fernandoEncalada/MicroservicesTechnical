@@ -1,6 +1,6 @@
 FROM openjdk:17.0.2
 
-EXPOSE 8083
+EXPOSE 8080
 
 WORKDIR /app
 
@@ -19,4 +19,4 @@ COPY ./src /app/src
 RUN ./mvnw clean install -DskipTests
 
 # LEVANTAR NUESTRA APLICACION CUANDO EL CONTENEDOR INICIE
-ENTRYPOINT ["java","-jar","/app/target/account-microservice-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/app/target/gateway-microservice-0.0.1-SNAPSHOT.jar"]

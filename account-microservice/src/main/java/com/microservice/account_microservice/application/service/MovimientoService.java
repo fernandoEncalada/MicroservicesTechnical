@@ -6,18 +6,15 @@ import com.microservice.account_microservice.application.ports.out.IMovimientoPo
 import com.microservice.account_microservice.domain.model.enums.MovementType;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.in.AccountRequestDto;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.in.MovementRequestDto;
-import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.AccountResponseDto;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.MovementResponseDto;
 import com.microservice.account_microservice.infrastructure.adapter.out.account.entity.AccountEntity;
 import com.microservice.account_microservice.infrastructure.adapter.out.account.repository.AccountRepository;
-import com.microservice.account_microservice.infrastructure.adapter.out.movement.entity.MovementEntity;
 import com.microservice.account_microservice.infrastructure.exception.AccountException;
 import com.microservice.account_microservice.infrastructure.exception.DataNotFoundException;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,14 +30,15 @@ public class MovimientoService implements IMovimientoService {
     @Override
     public MovementResponseDto create(MovementRequestDto movimiento) {
         Optional<AccountEntity> cuentaOptional = accountRepository.findById(movimiento.getIdCuenta());
+
         if (cuentaOptional.isEmpty()) throw new DataNotFoundException("Cuenta no encontrada con ID: " + movimiento.getIdCuenta());
+
         AccountEntity account = cuentaOptional.get();
 
         AccountRequestDto requestDto = new AccountRequestDto();
         requestDto.setTipo(account.getTipoCuenta());
         requestDto.setEstado(account.getEstado());
         requestDto.setClienteId(account.getIdCliente());
-        requestDto.setNumeroCuenta(account.getNumeroCuenta());
 
         Double total;
         if (movimiento.getTipoMovimiento().equals(MovementType.RETIRO)){
@@ -58,6 +56,7 @@ public class MovimientoService implements IMovimientoService {
         if (total < 0) throw new AccountException("Saldo no disponible");
 
         MovementResponseDto movementResponseDto = movimientoPort.create(movimiento, account);
+
         cuentaPort.update(movimiento.getIdCuenta(), requestDto);
 
         return movementResponseDto;

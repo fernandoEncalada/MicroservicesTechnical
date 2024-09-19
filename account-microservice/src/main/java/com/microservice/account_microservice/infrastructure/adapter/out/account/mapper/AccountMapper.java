@@ -5,12 +5,6 @@ import com.microservice.account_microservice.infrastructure.adapter.out.account.
 
 public class AccountMapper {
 
-//    public static Account toDomain(AccountResponseDto responseDto) {
-//        return new Account(
-//                responseDto.get
-//        );
-//    }
-
     public static AccountResponseDto toResponseDto(AccountEntity accountEntity, String clientName) {
         return new AccountResponseDto(
                 accountEntity.getNumeroCuenta(),

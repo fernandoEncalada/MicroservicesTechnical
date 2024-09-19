@@ -8,6 +8,7 @@ import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.
 import com.microservice.account_microservice.infrastructure.adapter.out.account.entity.AccountEntity;
 import com.microservice.account_microservice.infrastructure.adapter.out.account.mapper.AccountMapper;
 import com.microservice.account_microservice.infrastructure.adapter.out.account.repository.AccountRepository;
+import com.microservice.account_microservice.infrastructure.exception.AccountException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,6 @@ import static com.microservice.account_microservice.domain.util.Util.generateAcc
 @RequiredArgsConstructor
 public class AccountAdapter implements ICuentaPort {
     private final AccountRepository accountRepository;
-    //    private final ClientServiceFeignClient clientServiceFeign;
     private final IClientPort clientPort;
 
     @Override
@@ -40,26 +40,26 @@ public class AccountAdapter implements ICuentaPort {
 
     @Override
     public AccountResponseDto update(Long id, AccountRequestDto account) {
-        AccountEntity accountEntity = accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cuenta not found with id " + id));
+        AccountEntity accountEntity = accountRepository.findById(id).orElseThrow(() -> new AccountException("Cuenta no encontrada con ID: " + id));
         Cliente client = clientPort.getClient(id);
-        // Actualizar campos en cuentaEntity desde cuenta
-        accountEntity.setNumeroCuenta(account.getNumeroCuenta());
+
         accountEntity.setTipoCuenta(account.getTipo());
         accountEntity.setSaldoInicial(account.getSaldoInicial());
         accountEntity.setEstado(account.getEstado());
         accountEntity.setIdCliente(account.getClienteId());
 
-        // Guardar la entidad CuentaEntity actualizada
         AccountEntity updatedEntity = accountRepository.save(accountEntity);
 
-        // Retornar el objeto Cuenta con los datos actualizados
         return AccountMapper.toResponseDto(updatedEntity, client.getNombre());
     }
 
     @Override
     public void delete(Long id) {
-        accountRepository.deleteById(id);
+        AccountEntity accountEntity = accountRepository.findById(id).orElseThrow(() -> new AccountException("Cuenta no encontrada con ID: " + id));
+
+        accountEntity.setEstado(false);
+
+        accountRepository.save(accountEntity);
     }
 
     @Override

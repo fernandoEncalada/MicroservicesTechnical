@@ -14,17 +14,4 @@ public class Cliente extends Persona {
 
     private String contrasenia;
     private Boolean estado;
-
-    public Cliente(ClientEntity client) {
-        super(
-                client.getNombre(),
-                client.getGenero(),
-                client.getEdad(),
-                client.getIdentificacion(),
-                client.getDireccion(),
-                client.getTelefono()
-        );
-        this.contrasenia = client.getContrasenia();
-        this.estado = client.getEstado();
-    }
 }

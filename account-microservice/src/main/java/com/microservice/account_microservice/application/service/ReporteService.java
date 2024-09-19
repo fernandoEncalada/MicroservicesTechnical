@@ -2,13 +2,10 @@ package com.microservice.account_microservice.application.service;
 
 import com.microservice.account_microservice.application.ports.in.IReportService;
 import com.microservice.account_microservice.application.ports.out.IClientPort;
-import com.microservice.account_microservice.application.ports.out.ICuentaPort;
 import com.microservice.account_microservice.application.ports.out.IMovimientoPort;
-import com.microservice.account_microservice.application.ports.out.IReportePort;
 import com.microservice.account_microservice.domain.model.Movimiento;
 import com.microservice.account_microservice.domain.model.cliente.Cliente;
 import com.microservice.account_microservice.domain.model.enums.MovementType;
-import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.AccountResponseDto;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.AccountStatusReportDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -5,14 +5,10 @@ import com.microservice.account_microservice.application.ports.out.ICuentaPort;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.in.AccountRequestDto;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.in.ClientResponseDto;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.AccountResponseDto;
-import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.StatusAccountReportDto;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
-
-import static com.microservice.account_microservice.domain.util.Util.generateAccountNumber;
 
 @Service
 @RequiredArgsConstructor

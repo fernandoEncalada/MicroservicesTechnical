@@ -1,21 +1,16 @@
 package com.microservice.account_microservice.infrastructure.adapter.in.rest.controller;
 
 import com.microservice.account_microservice.application.ports.in.ICuentaService;
-import com.microservice.account_microservice.application.ports.in.IReportService;
-import com.microservice.account_microservice.domain.model.Account;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.in.AccountRequestDto;
 import com.microservice.account_microservice.infrastructure.adapter.in.rest.dto.out.AccountResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/cuentas")
 @RequiredArgsConstructor
-public class CuentaController {
+public class AccountController {
 
     private final ICuentaService cuentaService;
 
