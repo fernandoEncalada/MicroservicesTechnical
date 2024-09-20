@@ -12,9 +12,9 @@ spring:
     password: ${RABBITMQ_PASSWORD:guest}
 
   datasource:
-    url: jdbc:mysql://${DB_CLIENT_HOST:localhost}:3306/db_account
+    url: jdbc:mysql://${DB_CLIENT_HOST:localhost}:3306/db_account?useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_CLIENT_USER:root}
-    password: ${DB_CLIENT_PASSWORD:3tk98M17} # Esto cambia dependiendo de la contraseña que tengas en tu mysql local
+    password: ${DB_CLIENT_PASSWORD:3tk98M17}
 
   jpa:
     properties:

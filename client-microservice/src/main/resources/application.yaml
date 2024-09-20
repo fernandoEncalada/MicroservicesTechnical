@@ -4,6 +4,7 @@ spring:
   cloud:
     config:
       enabled: false
+
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: 5672
@@ -11,7 +12,7 @@ spring:
     password: ${RABBITMQ_PASSWORD:guest}
 
   datasource:
-    url: jdbc:mysql://${DB_CLIENT_HOST:localhost}:3306/db_client
+    url: jdbc:mysql://${DB_CLIENT_HOST:localhost}:3306/db_client?useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_CLIENT_USER:root}
     password: ${DB_CLIENT_PASSWORD:3tk98M17} # Esto cambia dependiendo de la contraseña que tengas en tu mysql local
 
