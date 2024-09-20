@@ -4,18 +4,17 @@ spring:
   cloud:
     config:
       enabled: false
+
   rabbitmq:
-    host: localhost
+    host: ${RABBITMQ_HOST:localhost}
     port: 5672
-    username: guest
-    password: guest
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
 
   datasource:
-    url: jdbc:mysql://localhost:3306/mcsv_client
-#    username: test
-#    password: test123
-    username: root
-    password: 3tk98M17
+    url: jdbc:mysql://${DB_CLIENT_HOST:localhost}:3306/db_client?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_CLIENT_USER:root}
+    password: ${DB_CLIENT_PASSWORD:3tk98M17} # Esto cambia dependiendo de la contraseña que tengas en tu mysql local
 
   jpa:
     properties:
@@ -26,3 +25,8 @@ spring:
 
 server:
   port: 8082
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

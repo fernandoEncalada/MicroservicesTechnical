@@ -1,100 +1,110 @@
-version: '3.7'
-
 services:
   db-client:
     image: mysql
-    container_name: db-client
+    container_name: client-db
     environment:
-      MYSQL_DATABASE: mcsv_client
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test123
-    volumes:
-      - db-client-data:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_client
     ports:
       - "3307:3306"
+    networks:
+      - microservices-network
 
   db-account:
     image: mysql
-    container_name: db-account
+    container_name: account-db
     environment:
-      MYSQL_DATABASE: mcsv_account
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test123
-    volumes:
-      - db-account-data:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_account
     ports:
       - "3308:3306"
+    networks:
+      - microservices-network
 
   eureka-server:
     image: eureka
-    container_name: eureka-server-container
+    container_name: eureka-server
     build:
       context: ./eureka-microservice
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
+    networks:
+      - microservices-network
 
   api-gateway:
-    image: api-gateway-image
-    container_name: api-gateway-container
+    image: gateway
+    container_name: api-gateway
     build:
       context: ./gateway-microservice
       dockerfile: Dockerfile
+    environment:
+      EUREKA_SERVER: http://eureka-server:8761/eureka
     ports:
       - "8080:8080"
     depends_on:
       - eureka-server
+    networks:
+      - microservices-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - microservices-network
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: always
 
   account-microservice:
-    image: account-mcsv-image
-    container_name: account-mcsv-container
+    image: account-micro
+    container_name: api-account
     build:
       context: ./account-microservice
       dockerfile: Dockerfile
     environment:
+      EUREKA_SERVER: http://eureka-server:8761/eureka
+      DB_CLIENT_HOST: account-db
+      DB_CLIENT_USER: root
+      DB_CLIENT_PASSWORD: root
       RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
     depends_on:
       - db-account
-      - rabbitmq
       - eureka-server
       - api-gateway
+      - rabbitmq
     networks:
-      - rabbitmq_network
+      - microservices-network
 
   client-microservice:
-    image: client-mcsv-image
-    container_name: client-mcsv-container
+    image: client-micro
+    container_name: api-client
     build:
       context: ./client-microservice
       dockerfile: Dockerfile
     environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      EUREKA_SERVER: http://eureka-server:8761/eureka
+      DB_CLIENT_HOST: client-db
+      DB_CLIENT_USER: root
+      DB_CLIENT_PASSWORD: root
+      RABBITMQ_HOST: rabbit
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
     depends_on:
       - db-client
-      - rabbitmq
       - eureka-server
       - api-gateway
+      - rabbitmq
     networks:
-      - rabbitmq_network
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    networks:
-      - rabbitmq_network
+      - microservices-network
 
 networks:
-  rabbitmq_network:
+  microservices-network:
     driver: bridge
-
-volumes:
-  db-client-data:
-  db-account-data:
+    name: microservices-network
