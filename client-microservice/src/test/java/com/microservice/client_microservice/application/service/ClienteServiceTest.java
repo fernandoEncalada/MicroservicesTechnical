@@ -48,7 +48,7 @@ public class ClienteServiceTest {
     void getClientTest() {
         doReturn(responseDto).when(clientPort).getClient(any());
 
-        ClientResponseDto response = clienteService.create(requestDto);
+        ClientResponseDto response = clienteService.getClient(1L);
 
         assertNotNull(response);
     }

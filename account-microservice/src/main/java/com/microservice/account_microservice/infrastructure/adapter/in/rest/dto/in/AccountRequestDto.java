@@ -12,11 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AccountRequestDto {
     private AccountType tipo;
-
     private Double saldoInicial;
-
     private Boolean estado;
-
     private Long clienteId;
 
 }

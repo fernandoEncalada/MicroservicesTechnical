@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableFeignClients
 @EnableDiscoveryClient
-//@EnableAsync
 public class AccountMicroserviceApplication {
 
 	public static void main(String[] args) {

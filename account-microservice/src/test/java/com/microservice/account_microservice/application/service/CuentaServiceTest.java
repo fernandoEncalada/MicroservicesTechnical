@@ -30,7 +30,7 @@ public class CuentaServiceTest {
 
     @BeforeEach
     void setUp(){
-        accountRequestDto = new AccountRequestDto("", AccountType.AHORRO, 100.0, false,
+        accountRequestDto = new AccountRequestDto(AccountType.AHORRO, 100.0, false,
                 1L);
         accountResponseDto = new AccountResponseDto("123", "AHORRO", 1000.0,
                 true, "Fernando");

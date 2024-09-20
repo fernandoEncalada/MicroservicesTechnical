@@ -34,6 +34,7 @@ public class ClientControllerTest {
 
     @Spy
     GlobalExceptionHandler globalExceptionHandler;
+
     MockMvc mockMvc;
 
     ObjectMapper objectMapper;
@@ -45,11 +46,11 @@ public class ClientControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        clientRequestDto = new ClientRequestDto("", "Masculino", 23, "1",
-                "Americas", "0964063532", "1234", false, AccountType.AHORRO,
-                250.50);
-        clientResponseDto = new ClientResponseDto("Juan Perez", "General Escandón", "09897045",
-                "123", true, AccountType.CORRIENTE, 2500.00, 1L);
+        clientRequestDto = new ClientRequestDto(
+                "Juan Perez", "Masculino", 30, "123456789", "Calle 123",
+                "555-1234", "password", true, AccountType.AHORRO, 500.0
+        );
+        clientResponseDto = new ClientResponseDto(1L, 500.0, AccountType.AHORRO);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(globalExceptionHandler).build();
     }
@@ -64,7 +65,6 @@ public class ClientControllerTest {
                 .andExpect(status().isCreated());
     }
 
-
     @Test
     void getClientTest() throws Exception {
         doReturn(clientResponseDto).when(clienteService).getClient(any());
@@ -72,6 +72,4 @@ public class ClientControllerTest {
         mockMvc.perform(get("/api/v1/clientes/{id}", 1L))
                 .andExpect(status().isOk());
     }
-
-
 }

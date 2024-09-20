@@ -3,8 +3,10 @@ package com.microservice.client_microservice.infrastructure.adapter.in.rest.dto.
 import com.microservice.client_microservice.domain.model.enums.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
